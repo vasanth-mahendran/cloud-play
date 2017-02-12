@@ -31,7 +31,7 @@ FILE_MAX_SIZE = 1000000
 # This class implements methods for the user to perform the cloud related services
 
 
-class Play:
+class play_object_storage:
 
     # Constructor to initialize gpg object, generate the key,initialize the swift connection
     # and create the container if not created.
@@ -83,7 +83,10 @@ class Play:
                                             print(
                                                 "File size exceeds the limit. total size should be less than or equal to 10MB")
                                         else:
-                                            self.upload(file_path, fn_input)
+                                            with open(file_path, 'rb') as f:
+                                                file_data = f.read()
+                                                print(file_data)
+                                                self.upload(file_data, fn_input)
                                 if fn_success:
                                     break
                             fp_success = True
@@ -118,8 +121,11 @@ class Play:
     def list(self):
         headers, objects = self.swift_conn.get_container(CONTAINER_NAME)
         print("-------List files------", objects)
+        list = []
         for obj in objects:
+            list.append(obj['name'])
             print("\n", obj['name'])
+        return list
 
     # This method returns the total size of the all the files present in the container
     def get_total_size(self):
@@ -130,12 +136,10 @@ class Play:
         return total
 
     # This method get the user inputs and upload the encrypted file
-    def upload(self, fp, fn):
-        with open(fp, 'rb') as f:
-            file_data = f.read()
-            file_data_encrypted = self.encrypt(file_data)
-            self.swift_conn.put_object(CONTAINER_NAME, fn, file_data_encrypted.data)
-            print("-------Upload successful--------")
+    def upload(self, file_data, fn):
+        file_data_encrypted = self.encrypt(file_data)
+        self.swift_conn.put_object(CONTAINER_NAME, fn, file_data_encrypted.data)
+        print("-------Upload successful--------")
 
     # This method get the user inputs and download the encrypted file and decrypt it
     def download(self, file_name):
@@ -161,5 +165,5 @@ class Play:
         return self.gpg.decrypt(data, passphrase=passphrase)
 
 
-play = Play()
+play = play_object_storage()
 play.swift_conn.close()

@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flask Cloudant Play</title>
+</head>
+<body>
+    <h1>List of files</h1>
+    <a href="/">home</a>
+    {% for item in list %}
+        <li>File name : {{ item.file_name }}
+            <ul>
+                <li>last modified date : {{item.last_modified_date}}</li>
+                <li>version number : {{item.version_number}}</li>
+            </ul>
+        </li>
+    {% endfor %}
+</body>
+</html>
