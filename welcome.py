@@ -1,3 +1,4 @@
+import os
 from flask import Flask
 from flask import render_template,request,Response,make_response
 from play_cloudant import play_cloudant
@@ -57,5 +58,6 @@ def delete():
         else:
             return render_template('delete.html',msg="Please enter the existing file name to delete it")
 
-if __name__ == '__main__':
-    app.run()
+port = os.getenv('PORT', '5000')
+if __name__ == "__main__":
+	app.run(host='0.0.0.0', port=int(port))
