@@ -7,6 +7,8 @@ from cloudant.client import Cloudant
 from cloudant.query import Query
 import datetime
 import hashlib
+import json
+import os
 
 credentials = {
   "username": "9cc9ab8f-6ed9-4f68-8c8c-28c254972ae4-bluemix",
@@ -42,8 +44,13 @@ class play_cloudant:
         return files
 
     # This method get the user inputs and upload the encrypted file
-    def upload(self, file_data, fn):
-        md5Hash = hashlib.md5(file_data.encode('utf-8')).hexdigest()
+    def upload(self, file_data, fn,content_type,description):
+
+        md5Hash = hashlib.md5(file_data).hexdigest()
+        if (content_type == 'text/plain'):
+            file_data = file_data.decode("utf-8")
+        else:
+            file_data = json.dumps(str(file_data))
         query = Query(self.my_database, selector={'file_name': fn})
         docs = query()['docs']
         for doc in docs:
@@ -63,7 +70,9 @@ class play_cloudant:
                     'version_number': max_vn+1,
                     'last_modified_date': str(datetime.datetime.now()),
                     'contents': file_data,
-                    'hash_value': md5Hash
+                    'hash_value': md5Hash,
+                    'content_type':content_type,
+                    'description' : description
                 }
                 self.my_database.create_document(data)
                 return True
@@ -77,7 +86,9 @@ class play_cloudant:
                 'version_number': 1,
                 'last_modified_date': str(datetime.datetime.now()),
                 'contents': file_data,
-                'hash_value': md5Hash
+                'hash_value': md5Hash,
+                'content_type':content_type,
+                'description' : description
             }
             print(data)
             self.my_database.create_document(data)
@@ -87,7 +98,7 @@ class play_cloudant:
     def download(self, file_name,version_number):
         try:
             data = self.my_database[file_name+"_"+str(version_number)]
-            return data['contents']
+            return data
         except Exception as error:
             print("Error while downloading the file", repr(error))
             return ""
@@ -100,6 +111,23 @@ class play_cloudant:
         except Exception as error:
             print("Error while deleting the file", repr(error))
             return False
+
+    def search(self, keyword):
+        try:
+            found = []
+            for doc in self.my_database:
+                if( keyword in doc['description']):
+                    doc['href'] = "/download?filename="+doc['file_name']+"&version_number="+str(doc['version_number'])
+                    found.append(doc)
+            print('found--', found)
+            return found
+        except Exception as error:
+            print("Error while downloading the file", repr(error))
+            return ""
+
+    def localfiles(self,dirpath):
+        files = os.listdir(dirpath)
+        return files
 
 play = play_cloudant()
 play.client.disconnect()
