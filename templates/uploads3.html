@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flask Cloudant Play</title>
+</head>
+<body>
+    <h1>Upload a file</h1>
+    <a href="/">home</a>
+    {% if get %}
+        <form action="/uploads3" method=post enctype=multipart/form-data>
+            <input type=file name=file>
+            <input type=submit value=Upload>
+        </form>
+    {% else %}
+        {% if success %}
+            <h3>file uploaded sucessfully!</h3>
+        {% else %}
+            <h3>file uploaded failed! Please check if the content is same</h3>
+        {% endif %}
+    {% endif %}
+</body>
+</html>
+
+
+

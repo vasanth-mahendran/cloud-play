@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flask Cloudant Play</title>
+</head>
+<body>
+    <h1>List of files</h1>
+    <a href="/">home</a>
+    <form action="/local" method="post">
+        Local path: <input type="text" name="dirpath"/>
+        <button name="submit" type="submit">submit</button>
+    </form>
+    {% if files %}
+        {% for item in files %}
+            <li>File name : {{ item}}</li>
+        {% endfor %}
+    {% endif %}
+</body>
+</html>

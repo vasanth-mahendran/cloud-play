@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flask Cloudant Play</title>
+</head>
+<body>
+    <h1>Search file</h1>
+    <a href="/">home</a>
+    <form action="/search" method="post">
+        Keyword: <input type="text" name="keyword"/>
+        <button name="submit" type="submit">submit</button>
+    </form>
+    {% if found %}
+        {% for item in found %}
+        <li><a href="{{item.href}}">File name : {{ item.file_name }} Version number: {{ item.version_number }}</a>
+        </li>
+    {% endfor %}
+    {% endif %}
+</body>
+</html>
