@@ -3,3 +3,4 @@
 .idea/
 Output.txt
 __pycache__/
+application/__pycache__/

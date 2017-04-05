@@ -22,7 +22,7 @@ s3 = play_s3()
 @application.app.route('/', methods=['GET', 'POST'])
 @application.app.route('/index', methods=['GET', 'POST'])
 def index():
-    return render_template('welcome_sql.html')
+    return render_template('rds/welcome.html')
 
 
 @application.app.route('/import', methods=['GET', 'POST'])
@@ -52,7 +52,7 @@ def import_data():
         application.db.session.rollback()
         raise
     stat = {'import': True, 'sql': True, 'time': time_taken, 'delete_rem': count_rem_canada, 'update_no': int(count_10k)}
-    return render_template('statistics.html', stat=stat)
+    return render_template('rds/statistics.html', stat=stat)
 
 
 @application.app.route('/query', methods=['GET', 'POST'])
@@ -60,7 +60,7 @@ def query():
     time_taken = 0
     try:
         if request.method == 'GET':
-            return render_template('query.html')
+            return render_template('rds/query.html')
         else:
             start_time = time.time()
             country = request.form['country']
@@ -86,7 +86,7 @@ def query():
         print('-------error-------')
         application.db.session.rollback()
         raise
-    return render_template('statistics.html',stat={'sql': True, 'query': True, 'count_no': len(data), 'time': time_taken})
+    return render_template('rds/statistics.html',stat={'sql': True, 'query': True, 'count_no': len(data), 'time': time_taken})
 
 
 @application.app.route('/match', methods=['GET', 'POST'])
@@ -101,7 +101,7 @@ def match():
         print('-------error-------')
         application.db.session.rollback()
         raise
-    return render_template('statistics.html',stat={'match': True, 'sql': True, 'time': time_taken, 'matches': all})
+    return render_template('rds/statistics.html',stat={'match': True, 'sql': True, 'time': time_taken, 'matches': all})
 
 
 @application.app.route('/random', methods=['GET', 'POST'])
@@ -119,7 +119,7 @@ def random():
         print('-------error-------')
         application.db.session.rollback()
         raise
-    return render_template('statistics.html',stat={'random': True, 'sql': True, 'time': time_taken})
+    return render_template('rds/statistics.html',stat={'random': True, 'sql': True, 'time': time_taken})
 
 
 @application.app.route('/specific', methods=['GET', 'POST'])
@@ -136,7 +136,7 @@ def specific():
         print('-------error-------')
         application.db.session.rollback()
         raise
-    return render_template('statistics.html',stat={'random': True, 'sql': True, 'time': time_taken})
+    return render_template('rds/statistics.html',stat={'random': True, 'sql': True, 'time': time_taken})
 
 
 @application.app.route('/specific/cache', methods=['GET', 'POST'])
@@ -155,7 +155,7 @@ def specific_cache():
         print('-------error-------')
         application.db.session.rollback()
         raise
-    return render_template('statistics.html',stat={'random': True, 'sql': True, 'time': time_taken})
+    return render_template('rds/statistics.html',stat={'random': True, 'sql': True, 'time': time_taken})
 
 
 @application.app.route('/random/cache', methods=['GET', 'POST'])
@@ -175,7 +175,7 @@ def random_cache():
         print('-------error-------')
         application.db.session.rollback()
         raise
-    return render_template('statistics.html',stat={'random': True, 'sql': True, 'time': time_taken})
+    return render_template('rds/statistics.html',stat={'random': True, 'sql': True, 'time': time_taken})
 
 port = os.getenv('PORT', '5000')
 if __name__ == "__main__":
