@@ -15,8 +15,7 @@ class play_s3:
     # Constructor to initialize gpg object, generate the key,initialize the swift connection
     # and create the container if not created.
     def __init__(self):
-        self.s3 = boto3.resource('s3', aws_access_key_id='AKIAJF22I462D4WAWUKA',
-                                 aws_secret_access_key='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')
+        self.s3 = boto3.resource('s3')
         self.bucket = self.s3.Bucket(BUCKET_NAME)
 
     # This method list all the files present in the container created
