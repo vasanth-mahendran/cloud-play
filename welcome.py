@@ -1,9 +1,11 @@
 import os
-import json
+
 from flask import Flask
-from flask import render_template,request,Response,make_response
-from play_cloudant import play_cloudant
-from play_s3 import play_s3
+from flask import render_template,request, make_response
+from application.modules.play_cloudant import play_cloudant
+
+from application.modules.play_s3 import play_s3
+
 app = Flask(__name__)
 play = play_cloudant()
 play_s3 = play_s3()

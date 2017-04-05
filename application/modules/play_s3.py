@@ -15,7 +15,8 @@ class play_s3:
     # Constructor to initialize gpg object, generate the key,initialize the swift connection
     # and create the container if not created.
     def __init__(self):
-        self.s3 = boto3.resource('s3')
+        self.s3 = boto3.resource('s3', aws_access_key_id='AKIAJF22I462D4WAWUKA',
+                                 aws_secret_access_key='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')
         self.bucket = self.s3.Bucket(BUCKET_NAME)
 
     # This method list all the files present in the container created
@@ -31,8 +32,12 @@ class play_s3:
         return True
 
     # This method get the user inputs and download the encrypted file and decrypt it
-    def download(self, file_name,version_number):
-        return True
+    def download(self, file_name):
+        for file in self.bucket.objects.all():
+            if file.key == file_name:
+                res = file.get()["Body"].read().decode('iso-8859-1')
+                return res
+        return ""
 
     def delete(self, file_name):
         for file in self.bucket.objects.all():
@@ -55,5 +60,22 @@ class play_s3:
         return False
 
     def search(self, keyword):
+        files = []
+        for file in self.bucket.objects.all():
+            res = file.get()["Body"].read().decode("utf-8")
+            if keyword in res:
+                files.append(file)
+        return files
+
+    def move(self, source,destination):
+        found = False
+        for file in self.bucket.objects.all():
+            if file.key == source:
+                found = True
+
+        if found:
+            self.s3.Object(BUCKET_NAME, destination).copy_from(CopySource=BUCKET_NAME+"/"+source)
+            self.s3.Object(BUCKET_NAME, source).delete()
+
         return True
 

@@ -1,14 +1,17 @@
-import os
-from sqlalchemy.sql import or_, and_
-from flask import render_template,request
-from application.models import Feeds, RainFeeds
-import application
-from random import randint
-from play_s3 import play_s3
-from io import StringIO
-import time
-import redis
 import csv
+import os
+import time
+from io import StringIO
+from random import randint
+
+import redis
+from flask import render_template,request
+from sqlalchemy.sql import or_, and_
+
+import application
+from application.models import Feeds, RainFeeds
+from application.modules.play_s3 import play_s3
+
 application.app.debug = True
 redis_store = redis.StrictRedis(host='myredissec.rzx2zy.ng.0001.usw2.cache.amazonaws.com', port=6379, db=0)
 application.db.create_all()
