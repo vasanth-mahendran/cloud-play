@@ -1,3 +1,5 @@
+redis
+SQLAlchemy
 Flask==0.10.1
 Cloudant==2.3.1
 boto3==1.4.4

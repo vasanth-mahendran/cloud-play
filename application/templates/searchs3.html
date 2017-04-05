@@ -5,15 +5,17 @@
     <title>Flask Cloudant Play</title>
 </head>
 <body>
-    <h1>Delete file</h1>
+    <h1>Search file</h1>
     <a href="/">home</a>
-    <form action="/deletes3" method="post">
-        File name: <input type="text" name="filename"/>
+    <form action="/searchs3" method="post">
+        Keyword: <input type="text" name="keyword"/>
         <button name="submit" type="submit">submit</button>
     </form>
-    {% if msg %}
-        <h3>{{msg}}</h3>
+    {% if found %}
+        {% for item in found %}
+        <li>File name : {{ item.key }}
+        </li>
+    {% endfor %}
     {% endif %}
 </body>
 </html>
-

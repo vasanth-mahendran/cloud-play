@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flask Cloudant Play</title>
+</head>
+<body>
+    <h1>Download file</h1>
+    <a href="/">home</a>
+    <form action="/downloads3" method="post">
+        File name: <input type="text" name="filename"/>
+        <button name="submit" type="submit">submit</button>
+    </form>
+    {% if msg %}
+        <h3>{{msg}}</h3>
+    {% endif %}
+</body>
+</html>
